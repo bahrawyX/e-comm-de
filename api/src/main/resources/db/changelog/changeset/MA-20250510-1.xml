@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!-- Create product table first -->
+    <changeSet id="0-create-product-table" author="mohamashraf">
+        <createTable tableName="product">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="image_url" type="VARCHAR(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="category" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Insert seed data -->
+    <changeSet id="1" author="mohamashraf">
+        <insert tableName="product">
+            <column name="name" value="Wireless Headphones"/>
+            <column name="description" value="Premium wireless headphones with noise cancellation, 30-hour battery life, and crystal-clear sound quality."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&amp;q=80"/>
+            <column name="category" value="Electronics"/>
+            <column name="price" valueNumeric="59.99"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Running Shoes"/>
+            <column name="description" value="Lightweight running shoes with responsive cushioning and breathable mesh upper for maximum comfort."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&amp;q=80"/>
+            <column name="category" value="Footwear"/>
+            <column name="price" valueNumeric="89.99"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Leather Backpack"/>
+            <column name="description" value="Handcrafted genuine leather backpack with laptop compartment, multiple pockets, and adjustable straps."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&amp;q=80"/>
+            <column name="category" value="Accessories"/>
+            <column name="price" valueNumeric="120.00"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Smart Watch"/>
+            <column name="description" value="Feature-packed smartwatch with heart-rate monitor, GPS tracking, and 7-day battery life."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&amp;q=80"/>
+            <column name="category" value="Electronics"/>
+            <column name="price" valueNumeric="199.99"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Sunglasses"/>
+            <column name="description" value="Polarized UV400 sunglasses with lightweight frame. Perfect for outdoor adventures."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&amp;q=80"/>
+            <column name="category" value="Accessories"/>
+            <column name="price" valueNumeric="45.00"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Denim Jacket"/>
+            <column name="description" value="Classic denim jacket with a modern slim fit. Versatile layering piece for any season."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=400&amp;q=80"/>
+            <column name="category" value="Clothing"/>
+            <column name="price" valueNumeric="75.00"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Yoga Mat"/>
+            <column name="description" value="Eco-friendly non-slip yoga mat with extra cushioning. 6mm thick for joint protection."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&amp;q=80"/>
+            <column name="category" value="Fitness"/>
+            <column name="price" valueNumeric="35.00"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Coffee Maker"/>
+            <column name="description" value="Programmable drip coffee maker with thermal carafe. Brews up to 12 cups of rich, flavorful coffee."/>
+            <column name="image_url" value="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&amp;q=80"/>
+            <column name="category" value="Home"/>
+            <column name="price" valueNumeric="149.99"/>
+            <column name="quantity" valueNumeric="100"/>
+        </insert>
+    </changeSet>
+
+    <!-- Alter price column type to match Java Double -->
+    <changeSet id="2-alter-price-column-type" author="mohamashraf">
+        <modifyDataType tableName="product" columnName="price" newDataType="DOUBLE PRECISION"/>
+    </changeSet>
+
+</databaseChangeLog>

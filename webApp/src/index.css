@@ -1,0 +1,492 @@
+@import "tailwindcss";
+
+/*
+  ─────────────────────────────────────────────────────────────────────────
+  ShopEasy Design System — SINGLE SOURCE OF TRUTH
+  ─────────────────────────────────────────────────────────────────────────
+  Soft, calm, premium, airy, slightly glassy. Every color, radius, shadow and
+  font used across the app resolves to a token defined here. Do not hardcode
+  colors in components — reach for these tokens (Tailwind utilities like
+  `text-ink`, `bg-accent`, `rounded-card`, or the component classes below).
+*/
+
+@theme {
+  /* Type — one modern geometric sans */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+
+  /* Text */
+  --color-ink: #0a1226; /* primary — near-black navy */
+  --color-muted: #6b7280; /* secondary */
+  --color-faint: #9ca3af; /* tertiary / micro-labels */
+
+  /* Accent — CTA only */
+  --color-accent: #d8f651; /* lime */
+  --color-accent-strong: #cbec3a; /* lime, hover/press */
+
+  /* Page wash */
+  --color-paper-1: #f4f6f5; /* cool */
+  --color-paper-2: #edefea; /* warm */
+
+  /* Hairline */
+  --color-hairline: rgba(10, 18, 38, 0.06);
+
+  /* Radii — big radii are the signature */
+  --radius-card: 26px;
+  --radius-panel: 32px;
+  --radius-inner: 16px;
+  --radius-pill: 999px;
+}
+
+:root {
+  /* Frosted surfaces */
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-solid: rgba(255, 255, 255, 0.86);
+  --surface-tint: rgba(255, 255, 255, 0.55); /* image panels inside cards */
+  --border-soft: rgba(10, 18, 38, 0.05);
+
+  /* Shadows — soft, low-opacity, tinted to the ink hue. Never harsh black. */
+  --shadow-soft: 0 8px 32px rgba(10, 18, 38, 0.06);
+  --shadow-bloom: 0 20px 48px rgba(10, 18, 38, 0.1);
+  --shadow-inset-hi: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* Motion — Apple-grade easing */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-in: 400ms;
+  --dur-out: 250ms;
+}
+
+/* ── Base ────────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  /* Very subtle cool → warm wash. Never pure white. */
+  background: linear-gradient(135deg, var(--color-paper-1) 0%, var(--color-paper-2) 100%);
+  background-attachment: fixed;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv11", "ss01";
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* Focus ring — visible for keyboard users, on-brand */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── Surfaces ────────────────────────────────────────────────────────── */
+
+/* Frosted glass panel — the core material */
+.glass {
+  background: var(--surface);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Softer, tinted panel used behind product imagery */
+.tint-panel {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.7), rgba(237, 239, 234, 0.55));
+  border: 1px solid var(--border-soft);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────── */
+
+/* Solid dark pill — primary product action ("Add to Cart") */
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-ink);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: background-color var(--dur-out) var(--ease-out-quint),
+    transform var(--dur-out) var(--ease-out-quint);
+  cursor: pointer;
+}
+.btn-dark:hover {
+  background: #131c3a; /* ~6% lighter */
+  transform: scale(1.02);
+}
+.btn-dark:active {
+  transform: scale(0.98);
+}
+
+/* Lime CTA pill with a dark circular arrow button nested inside */
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-accent);
+  color: var(--color-ink);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  transition: background-color var(--dur-out) var(--ease-out-quint),
+    transform var(--dur-out) var(--ease-out-quint);
+  cursor: pointer;
+}
+.btn-accent:hover {
+  background: var(--color-accent-strong);
+}
+.btn-accent:active {
+  transform: scale(0.98);
+}
+/* the circular arrow that lives inside the lime pill */
+.btn-accent__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-ink);
+  color: var(--color-accent);
+  transition: transform var(--dur-in) var(--ease-out-quint);
+}
+.btn-accent:hover .btn-accent__arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Outlined / ghost pill — secondary actions (wishlist, clear cart) */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--surface);
+  color: var(--color-ink);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  transition: background-color var(--dur-out) var(--ease-out-quint),
+    transform var(--dur-out) var(--ease-out-quint);
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--surface-solid);
+  transform: scale(1.02);
+}
+.btn-outline:active {
+  transform: scale(0.98);
+}
+
+/* Circular icon pill — nav actions, quantity steppers */
+.icon-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--color-ink);
+  transition: background-color var(--dur-out) var(--ease-out-quint),
+    transform var(--dur-out) var(--ease-out-quint);
+  cursor: pointer;
+}
+.icon-pill:hover {
+  background: var(--surface-solid);
+  transform: scale(1.06);
+}
+.icon-pill:active {
+  transform: scale(0.96);
+}
+
+/* dark circular icon button (search submit, nav cart) */
+.icon-dark {
+  background: var(--color-ink);
+  color: #fff;
+  border-color: transparent;
+}
+.icon-dark:hover {
+  background: #131c3a;
+}
+
+/* ── Pills & labels ──────────────────────────────────────────────────── */
+
+/* Category filter pill — frosted inactive / solid dark active */
+.filter-pill {
+  border-radius: var(--radius-pill);
+  padding: 0.55rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--color-muted);
+  transition: background-color 200ms var(--ease-out-quint),
+    color 200ms var(--ease-out-quint), border-color 200ms var(--ease-out-quint);
+}
+.filter-pill:not(:disabled):hover {
+  color: var(--color-ink);
+}
+.filter-pill--active {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: #fff;
+}
+
+/* small grey uppercase micro-label (replaces the old red category text) */
+.micro-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* small pill chip (eyebrow badges, stock pill) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  color: var(--color-muted);
+}
+
+/* frosted search field */
+.field {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  transition: background-color var(--dur-out) var(--ease-out-quint);
+}
+.field::placeholder {
+  color: var(--color-faint);
+}
+.field:not(:disabled):focus {
+  background: var(--surface-solid);
+}
+
+/* ── Motion helpers ──────────────────────────────────────────────────── */
+
+/* Two stacked shadow layers cross-faded on hover (no box-shadow animation) */
+.lift {
+  position: relative;
+  isolation: isolate;
+}
+.lift::before,
+.lift::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  transition: opacity var(--dur-in) var(--ease-out-quint);
+  pointer-events: none;
+}
+.lift::before {
+  box-shadow: var(--shadow-soft);
+  opacity: 1;
+}
+.lift::after {
+  box-shadow: var(--shadow-bloom);
+  opacity: 0;
+}
+.lift:hover::before {
+  opacity: 0;
+}
+.lift:hover::after {
+  opacity: 1;
+}
+
+/* Product-card inner image: grows inside its rounded frame on card hover */
+.card-media {
+  transition: transform var(--dur-in) var(--ease-out-quint);
+  will-change: transform;
+}
+.group:hover .card-media {
+  transform: scale(1.04);
+}
+
+/* "Add to Cart" pill: fades 0.85 → 1 on card hover (color/opacity only) */
+.card-cta {
+  opacity: 0.85;
+  transition: opacity var(--dur-in) var(--ease-out-quint),
+    background-color var(--dur-out) var(--ease-out-quint);
+}
+.group:hover .card-cta {
+  opacity: 1;
+}
+
+/* Sheen sweep across a surface on hover */
+.sheen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+}
+.sheen::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 45%;
+  height: 140%;
+  transform: translateX(-160%) rotate(8deg);
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+}
+
+/* ── Ambient life (subtle, continuous) ───────────────────────────────── */
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(8%, -5%) scale(1.08);
+  }
+  66% {
+    transform: translate(-6%, 6%) scale(0.95);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-9%, 7%) scale(1.12);
+  }
+}
+@keyframes sheen-sweep {
+  to {
+    transform: translateX(320%) rotate(8deg);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animated aurora that sits behind everything */
+.aurora {
+  position: fixed;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  filter: blur(70px);
+}
+.aurora__blob {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.5;
+  will-change: transform;
+}
+
+/* Fixed grain overlay for premium depth */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ambient animations only run when the user hasn't asked for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .anim-float {
+    animation: float-y 6s ease-in-out infinite;
+  }
+  .anim-glow {
+    animation: glow-pulse 5s ease-in-out infinite;
+  }
+  .anim-spin-slow {
+    animation: spin-slow 44s linear infinite;
+  }
+  .aurora__blob--a {
+    animation: drift-a 26s ease-in-out infinite;
+  }
+  .aurora__blob--b {
+    animation: drift-b 32s ease-in-out infinite;
+  }
+  .group:hover .sheen::before {
+    animation: sheen-sweep 900ms var(--ease-out-quint);
+  }
+  .reveal {
+    animation: rise-in 0.7s var(--ease-out-quint) both;
+  }
+}
+
+/* Respect reduced-motion — kill transforms, keep color/opacity fades */
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .card-media {
+    transform: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+  .btn-dark:hover,
+  .btn-outline:hover,
+  .icon-pill:hover,
+  .btn-accent:active,
+  .btn-dark:active,
+  .btn-accent:hover .btn-accent__arrow {
+    transform: none !important;
+  }
+}

@@ -1,0 +1,93 @@
+/*
+  products.ts
+  ───────────
+  A simple array of product objects used as our "database".
+  In a real app you would fetch this data from a backend API instead.
+
+  Each product has:
+  - id          → unique number to identify the product
+  - name        → display name
+  - price       → cost in dollars
+  - image       → URL to a product photo
+  - category    → grouping label
+  - description → longer text shown on the detail page
+*/
+
+import type { Product } from "../types";
+
+const products: Product[] = [
+  {
+    id: 1,
+    name: "Wireless Headphones",
+    price: 59.99,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
+    category: "Electronics",
+    description:
+      "Premium wireless headphones with noise cancellation, 30-hour battery life, and crystal-clear sound quality.",
+  },
+  {
+    id: 2,
+    name: "Running Shoes",
+    price: 89.99,
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
+    category: "Footwear",
+    description:
+      "Lightweight running shoes with responsive cushioning and breathable mesh upper for maximum comfort.",
+  },
+  {
+    id: 3,
+    name: "Leather Backpack",
+    price: 120.0,
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
+    category: "Accessories",
+    description:
+      "Handcrafted genuine leather backpack with laptop compartment, multiple pockets, and adjustable straps.",
+  },
+  {
+    id: 4,
+    name: "Smart Watch",
+    price: 199.99,
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
+    category: "Electronics",
+    description:
+      "Feature-packed smartwatch with heart-rate monitor, GPS tracking, and 7-day battery life.",
+  },
+  {
+    id: 5,
+    name: "Sunglasses",
+    price: 45.0,
+    image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80",
+    category: "Accessories",
+    description:
+      "Polarized UV400 sunglasses with lightweight frame. Perfect for outdoor adventures.",
+  },
+  {
+    id: 6,
+    name: "Denim Jacket",
+    price: 75.0,
+    image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=400&q=80",
+    category: "Clothing",
+    description:
+      "Classic denim jacket with a modern slim fit. Versatile layering piece for any season.",
+  },
+  {
+    id: 7,
+    name: "Yoga Mat",
+    price: 35.0,
+    image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&q=80",
+    category: "Fitness",
+    description:
+      "Eco-friendly non-slip yoga mat with extra cushioning. 6mm thick for joint protection.",
+  },
+  {
+    id: 8,
+    name: "Coffee Maker",
+    price: 149.99,
+    image: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=400&q=80",
+    category: "Home",
+    description:
+      "Programmable drip coffee maker with thermal carafe. Brews up to 12 cups of rich, flavorful coffee.",
+  },
+];
+
+export default products;
