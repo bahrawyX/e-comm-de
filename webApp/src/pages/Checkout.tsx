@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { useCart, useTotalPrice } from "../context/CartContext";
 import { ArrowLeft, Check } from "../components/icons";
 import Price from "../components/ui/Price";
@@ -19,6 +20,7 @@ function Checkout() {
     e.preventDefault();
     clearCart();
     setSubmitted(true);
+    toast.success("Order placed! Your order is on its way.");
   }
 
   if (submitted) {

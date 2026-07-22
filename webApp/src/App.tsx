@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "sonner";
 import TopBar from "./components/TopBar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <div className="flex min-h-[100dvh] flex-col">
+      <Toaster richColors position="bottom-right" />
       <TopBar />
       <Navbar />
 
