@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 import { useTotalItems } from "../context/CartContext";
 import { useFavourites } from "../context/FavouritesContext";
 import { useAuth } from "../context/AuthContext";
@@ -72,16 +71,9 @@ function Navbar() {
             <span className="hidden sm:inline">Account</span>
           </button>
 
-          <button
-            type="button"
+          <Link
+            to="/favourites"
             aria-label={`Wishlist, ${favCount} items`}
-            onClick={() =>
-              toast(
-                favCount > 0
-                  ? `You have ${favCount} item${favCount === 1 ? "" : "s"} in your wishlist`
-                  : "Your wishlist is empty",
-              )
-            }
             className="relative flex items-center gap-2 text-sm font-medium text-ink transition-colors hover:text-brand"
           >
             <span className="relative">
@@ -93,7 +85,7 @@ function Navbar() {
               )}
             </span>
             <span className="hidden sm:inline">Wishlist</span>
-          </button>
+          </Link>
 
           <Link
             to="/cart"

@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Favourites from "./pages/Favourites";
 import Login from "./components/Login";
 import { useAuth } from "./context/AuthContext";
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/favourites" element={<Favourites />} />
         </Routes>
       </main>
 
