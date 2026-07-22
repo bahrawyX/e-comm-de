@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
+import { useFavourites } from "../context/FavouritesContext";
 import type { Product } from "../types";
 import { Heart, Bag } from "./icons";
 import Price from "./ui/Price";
@@ -11,6 +13,17 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const faved = useFavourites((s) => s.ids.includes(product.id));
+  const toggle = useFavourites((s) => s.toggle);
+
+  const toggleFav = () => {
+    toggle(product.id);
+    toast.success(
+      faved
+        ? `${product.name} removed from wishlist`
+        : `${product.name} added to wishlist`,
+    );
+  };
 
   return (
     <li className="product-card group list-none">
@@ -21,9 +34,11 @@ function ProductCard({ product }: ProductCardProps) {
         <button
           type="button"
           aria-label="Save to wishlist"
-          className="wishlist-btn"
+          aria-pressed={faved}
+          onClick={toggleFav}
+          className={`wishlist-btn ${faved ? "!text-sale" : ""}`}
         >
-          <Heart className="h-4 w-4" />
+          <Heart className="h-4 w-4" filled={faved} />
         </button>
       </div>
 
@@ -45,7 +60,10 @@ function ProductCard({ product }: ProductCardProps) {
         <Rating className="mt-2" />
 
         <button
-          onClick={() => addItem(product)}
+          onClick={() => {
+            addItem(product);
+            toast.success(`${product.name} added to cart`);
+          }}
           className="btn btn-outline mt-3 h-9 px-5 text-sm"
         >
           <Bag className="h-4 w-4" />

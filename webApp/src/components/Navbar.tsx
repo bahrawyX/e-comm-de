@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { useTotalItems } from "../context/CartContext";
+import { useFavourites } from "../context/FavouritesContext";
 import { useAuth } from "../context/AuthContext";
-import { Search, Bag, User, ChevronDown, CartMark } from "./icons";
+import { Search, Bag, Heart, User, ChevronDown, CartMark } from "./icons";
 
 const NAV_LINKS = [
   { label: "Categories", hasMenu: true },
@@ -12,6 +14,7 @@ const NAV_LINKS = [
 
 function Navbar() {
   const totalItems = useTotalItems();
+  const favCount = useFavourites((s) => s.ids.length);
   const { user, logout } = useAuth();
 
   return (
@@ -67,6 +70,29 @@ function Navbar() {
               <User className="h-5 w-5" />
             )}
             <span className="hidden sm:inline">Account</span>
+          </button>
+
+          <button
+            type="button"
+            aria-label={`Wishlist, ${favCount} items`}
+            onClick={() =>
+              toast(
+                favCount > 0
+                  ? `You have ${favCount} item${favCount === 1 ? "" : "s"} in your wishlist`
+                  : "Your wishlist is empty",
+              )
+            }
+            className="relative flex items-center gap-2 text-sm font-medium text-ink transition-colors hover:text-brand"
+          >
+            <span className="relative">
+              <Heart className="h-5 w-5" />
+              {favCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold text-white">
+                  {favCount}
+                </span>
+              )}
+            </span>
+            <span className="hidden sm:inline">Wishlist</span>
           </button>
 
           <Link

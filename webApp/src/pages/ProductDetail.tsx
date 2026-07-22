@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
 import { fetchProducts } from "../lib/api";
 import { Product } from "../types";
@@ -44,6 +45,7 @@ function ProductDetail() {
   const addToCart = () => {
     if (!product) return;
     for (let i = 0; i < qty; i++) addItem(product);
+    toast.success(`${qty} × ${product.name} added to cart`);
   };
 
   const buyNow = () => {
