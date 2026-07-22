@@ -1,85 +1,62 @@
-/*
-  Home.tsx
-  ────────
-  The main landing page — shows all products in a grid.
-  Includes a search bar and category filter buttons.
- 
-  KEY CONCEPTS:
-  - useState → stores what the user typed in search and which category is selected
-  - Filtering → we loop through products and only keep the ones that match
-  - .map() → loops through an array and creates a component for each item
-*/
-import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import { Product } from "../types";
 import { fetchProducts } from "../lib/api";
-import { ArrowUpRight, Search } from "../components/icons";
-// Persists across remounts within the session → entrance runs exactly once.
-let hasGridEntered = false;
+import { Bag, Search } from "../components/icons";
+
+const HERO_IMAGE = "./greenHeadset.png";
+
+const ALL_CATEGORIES = "All";
+
 function Home() {
   const [products, setProducts] = useState<Product[]>([]);
-  // State for the search text input
-  const [search, setSearch] = useState<string>("");
-  // State for the selected category button
-  const [category, setCategory] = useState<string>("All");
   const [loading, setLoading] = useState<boolean>(true);
-  // Build a list of unique categories from the products
-  const categories = ["All", ...new Set(products.map((p) => p.category))];
-   const reduce = useReducedMotion();
-   const playEntrance = useRef(!hasGridEntered);
+
   useEffect(() => {
-    const fetchData = async() => {
-      const dbProducts = await fetchProducts();
-      setProducts(dbProducts);
+    fetchProducts().then((data) => {
+      setProducts(data);
       setLoading(false);
-    };
-    fetchData();
+    });
   }, []);
- 
-  if (loading) {
-    return (
-      <div>Loading...</div>
-    )
-  }
-  console.log(products)
- 
+
+  const categories = [ALL_CATEGORIES, ...new Set(products.map((p) => p.category))];
+
+  const fallbackHeroImage = products[0]?.imageUrl;
+
   return (
-    <div className="flex flex-col gap-10">
-      {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className="glass grid items-center gap-8 rounded-panel p-8 sm:p-10 lg:grid-cols-2 lg:p-14">
-        <div className="reveal flex flex-col items-start">
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.04] tracking-[-0.02em] text-ink sm:text-5xl lg:text-6xl">
-            Beautiful things,
+    <div className="flex flex-col gap-10 py-8">
+      <section className="grid items-center gap-6 overflow-hidden rounded-panel bg-gradient-to-r from-hero to-hero-2 p-8 sm:p-12 lg:grid-cols-2">
+        <div>
+          <h1 className="text-3xl font-semibold leading-tight text-brand sm:text-4xl lg:text-5xl">
+            Grab Upto 50% Off On
             <br />
-            thoughtfully priced.
+            Selected Headphone
           </h1>
-          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted">
-            A calm little shop for premium everyday essentials — headphones,
-            footwear and more, chosen with care.
-          </p>
-          <a href="#catalog" className="btn-accent mt-8 h-14">
-            Shop now
-            <span className="btn-accent__arrow">
-              <ArrowUpRight className="h-5 w-5" />
-            </span>
+          <a href="#catalog" className="btn btn-primary mt-8 h-11 px-7 text-sm">
+            Buy Now
           </a>
         </div>
 
-        <div className="relative flex min-h-[300px] items-center justify-center lg:min-h-[380px]">
+        <div className="flex justify-center lg:justify-end">
           <img
-            src={products[0].imageUrl}
-            alt={products[0].imageUrl}
-            className="relative z-10 h-64 w-auto object-contain drop-shadow-[0_24px_48px_rgba(10,18,38,0.18)] sm:h-72"
+            src={HERO_IMAGE}
+            alt=""
+            aria-hidden="true"
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (fallbackHeroImage && img.src !== fallbackHeroImage) {
+                img.src = fallbackHeroImage;
+              }
+            }}
+            className="h-56 w-auto object-contain drop-shadow-xl sm:h-72"
           />
         </div>
       </section>
 
-      {/* ── Search + category filters ──────────────────────────────────── */}
-      <div id="catalog" className="flex flex-col gap-5">
+      <section id="catalog" className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold tracking-tight text-ink">
-            All products
+            Our Unique Products
           </h2>
 
           <div className="relative w-full sm:max-w-xs">
@@ -87,47 +64,65 @@ function Home() {
             <input
               type="text"
               placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search products"
               disabled
-              className="field w-full cursor-not-allowed py-2.5 pl-11 pr-4 text-sm outline-none"
+              className="field h-11 w-full cursor-not-allowed pl-11 pr-4 text-sm"
             />
           </div>
         </div>
 
         <div className="flex flex-wrap gap-2.5">
-          {categories.map((cat) => {
-            const isSelected = category === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                disabled
-                className={`filter-pill cursor-not-allowed ${
-                  isSelected ? "filter-pill--active" : ""
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
+          {categories.map((cat, i) => (
+            <button
+              key={cat}
+              type="button"
+              disabled
+              className={`pill cursor-not-allowed ${i === 0 ? "pill--active" : ""}`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-      </div>
 
-      {/* ── Product grid ───────────────────────────────────────────────── */}
-      <motion.ul
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04 } } }}
-        initial={playEntrance.current && !reduce ? "hidden" : false}
-        animate="show"
-        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-      >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </motion.ul>
+        {loading ? (
+          <ProductGridSkeleton />
+        ) : products.length === 0 ? (
+          <EmptyCatalog />
+        ) : (
+          <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }
- 
+
+function ProductGridSkeleton() {
+  return (
+    <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+      {Array.from({ length: 8 }, (_, i) => (
+        <li key={i} className="list-none">
+          <div className="aspect-square animate-pulse rounded-tile bg-panel" />
+          <div className="mt-3 h-4 w-2/3 animate-pulse rounded bg-panel" />
+          <div className="mt-2 h-3 w-1/2 animate-pulse rounded bg-panel" />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function EmptyCatalog() {
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-panel bg-panel px-8 py-16 text-center">
+      <Bag className="h-8 w-8 text-muted" />
+      <p className="text-sm text-muted">
+        No products available right now. Please check back soon.
+      </p>
+    </div>
+  );
+}
+
 export default Home;
- 

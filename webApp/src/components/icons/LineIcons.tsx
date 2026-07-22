@@ -1,10 +1,3 @@
-/*
-  LineIcons.tsx
-  ─────────────
-  Presentational-only line icons (no logic, no state). Uniform 1.5 stroke,
-  currentColor, round caps — so they inherit text color and size via className.
-*/
-
 import React from "react";
 
 type IconProps = { className?: string };
@@ -109,5 +102,48 @@ export const Check: React.FC<IconProps> = ({ className = "w-5 h-5" }) => (
 export const Star: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
   <svg className={className} {...base} fill="currentColor" stroke="none">
     <path d="m12 3 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 22.6 6.8 19.2l1-5.8L3.5 9.2l5.9-.9L12 3Z" />
+  </svg>
+);
+
+export const ChevronDown: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} {...base}>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
+export const Phone: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} {...base}>
+    <path d="M5 4h3l1.5 4-2 1.5a12 12 0 0 0 5 5l1.5-2 4 1.5V18a2 2 0 0 1-2 2A15 15 0 0 1 4 6a2 2 0 0 1 1-2Z" />
+  </svg>
+);
+
+export const MapPin: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} {...base}>
+    <path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11Z" />
+    <circle cx="12" cy="10" r="2.5" />
+  </svg>
+);
+
+export const Sliders: React.FC<IconProps> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} {...base}>
+    <path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h8M16 18h4" />
+    <circle cx="16" cy="6" r="2" fill="currentColor" stroke="none" />
+    <circle cx="8" cy="12" r="2" fill="currentColor" stroke="none" />
+    <circle cx="14" cy="18" r="2" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const RotateCcw: React.FC<IconProps> = ({ className = "w-5 h-5" }) => (
+  <svg className={className} {...base}>
+    <path d="M4 9a8 8 0 1 1-1 4" />
+    <path d="M3 4v5h5" />
+  </svg>
+);
+
+export const CartMark: React.FC<IconProps> = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M3 4a1 1 0 0 0 0 2h1.2l2 9.4A2 2 0 0 0 8.15 17H18a1 1 0 0 0 0-2H8.55l-.3-1.4h10.1a1 1 0 0 0 .97-.76l1.4-5.6A1 1 0 0 0 19.75 6H6.6l-.34-1.6A1 1 0 0 0 5.28 4H3Z" />
+    <circle cx="8.5" cy="20" r="1.6" />
+    <circle cx="17.5" cy="20" r="1.6" />
   </svg>
 );

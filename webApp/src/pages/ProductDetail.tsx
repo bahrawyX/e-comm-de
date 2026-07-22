@@ -1,66 +1,65 @@
-/*
-  ProductDetail.tsx
-  ─────────────────
-  Full details for a single product.
-
-  KEY CONCEPTS (unchanged):
-  - useParams() → reads :id from the URL
-  - products.find() → looks up the product
-  - useCart() → addItem() adds the product (qty 1, exactly as before)
-
-  PRESENTATIONAL-ONLY additions (no new app state, no invented data):
-  - stock chip, thumbnail rail (the single real image), quantity stepper (fixed
-    at 1, disabled), wishlist button, and a generic trust row.
-  - Rating, spec sheets, and color swatches are intentionally OMITTED because
-    that data does not exist on the product model.
-*/
-
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { fetchProducts } from "../lib/api";
+import { Product } from "../types";
 import {
   ArrowLeft,
-  Heart,
-  ShieldCheck,
-  Truck,
-  Lock,
   Plus,
   Minus,
   Bag,
+  Truck,
+  RotateCcw,
 } from "../components/icons";
-import { useEffect, useState } from "react";
-import { Product } from "../types";
-import { fetchProducts } from "../lib/api";
+import Price from "../components/ui/Price";
+import Rating from "../components/ui/Rating";
+import ProductCard from "../components/ProductCard";
 
 function ProductDetail() {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [products, setProducts] = useState<Product[]>([]);
-  const { addItem } = useCart();
   const { id } = useParams<{ id: string }>();
-  const product = products.find((p) => p.id === Number(id));
+  const navigate = useNavigate();
+  const { addItem } = useCart();
 
-   useEffect(() => {
-      const fetchData = async() => {
-        const dbProducts = await fetchProducts();
-        setProducts(dbProducts);
-        setLoading(false);
-      };
-      fetchData();
-    }, []);
-   
-    if (loading) {
-      return (
-        <div>Loading...</div>
-      )
-    }
-  console.log(products)
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [qty, setQty] = useState<number>(1);
+
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      setProducts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const product = useMemo(
+    () => products.find((p) => p.id === Number(id)),
+    [products, id],
+  );
+
+  const similar = useMemo(
+    () => products.filter((p) => p.id !== Number(id)).slice(0, 4),
+    [products, id],
+  );
+
+  const addToCart = () => {
+    if (!product) return;
+    for (let i = 0; i < qty; i++) addItem(product);
+  };
+
+  const buyNow = () => {
+    addToCart();
+    navigate("/cart");
+  };
+
+  if (loading) {
+    return <p className="py-20 text-center text-sm text-muted">Loading…</p>;
+  }
 
   if (!product) {
     return (
-      <div className="glass mx-auto max-w-xl rounded-panel px-8 py-20 text-center">
-        <h2 className="text-2xl font-semibold tracking-tight text-ink">
-          Product not found
-        </h2>
-        <Link to="/" className="btn-dark mt-6 h-12 px-6 text-sm">
+      <div className="mx-auto max-w-xl rounded-panel bg-panel px-8 py-20 text-center">
+        <h2 className="text-2xl font-semibold text-ink">Product not found</h2>
+        <Link to="/" className="btn btn-primary mt-6 h-11 px-6 text-sm">
           <ArrowLeft className="h-4 w-4" />
           Back to shop
         </Link>
@@ -69,135 +68,127 @@ function ProductDetail() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl">
-      <Link
-        to="/"
-        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to shop
-      </Link>
+    <div className="py-8">
+      <nav className="mb-6 flex items-center gap-2 text-xs text-muted">
+        <Link to="/" className="hover:text-brand">Home</Link>
+        <span>/</span>
+        <span className="text-faint">{product.category}</span>
+        <span>/</span>
+        <span className="truncate text-ink">{product.name}</span>
+      </nav>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* ── Left: thumbnail rail + large image on a soft gradient panel ── */}
-        <div className="flex gap-4">
-          {/* Thumbnail rail (the single real image) */}
-          <div className="hidden flex-col gap-3 sm:flex">
-            <span className="tint-panel flex h-20 w-20 items-center justify-center overflow-hidden rounded-inner ring-1 ring-ink/15">
-              <img
-                src={product.imageUrl}
-                alt=""
-                aria-hidden="true"
-                className="h-full w-full object-contain p-2"
-              />
-            </span>
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <div className="product-tile product-tile--contain aspect-[4/3]">
+            <img src={product.imageUrl} alt={product.name} />
           </div>
-
-          {/* Large image */}
-          <div className="tint-panel relative flex flex-1 items-center justify-center overflow-hidden rounded-panel p-8">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(55% 55% at 50% 45%, rgba(216,246,81,0.28) 0%, rgba(216,246,81,0) 70%)",
-              }}
-            />
-            <button
-              type="button"
-              aria-label="Save to wishlist"
-              className="icon-pill absolute right-4 top-4 z-10 h-10 w-10"
-            >
-              <Heart className="h-5 w-5" />
+          <div className="flex gap-3">
+            <button className="product-tile h-20 w-20 shrink-0 p-2 ring-2 ring-brand">
+              <img src={product.imageUrl} alt="" aria-hidden="true" />
             </button>
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="relative z-1 h-72 w-auto object-contain drop-shadow-[0_24px_48px_rgba(10,18,38,0.16)] sm:h-80"
-            />
           </div>
         </div>
 
-        {/* ── Right: product info ────────────────────────────────────────── */}
-        <div className="glass flex flex-col rounded-panel p-8 lg:p-10">
-          <div className="flex items-center gap-3">
-            <span className="micro-label">{product.category}</span>
-          </div>
-
-          <h1 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-4xl">
+        <div className="flex flex-col">
+          <span className="text-xs font-medium uppercase tracking-wide text-muted">
+            {product.category}
+          </span>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
             {product.name}
           </h1>
+          <Rating className="mt-3" />
 
-          <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-muted">
+          <p className="mt-5 text-3xl font-semibold text-brand">
+            <Price value={product.price} />
+            <span className="ml-2 align-middle text-sm font-normal text-muted">
+              or {(product.price / 6).toFixed(2)}/month
+            </span>
+          </p>
+
+          <p className="mt-5 max-w-prose text-sm leading-relaxed text-muted">
             {product.description}
           </p>
 
-          <p className="mt-7 text-4xl font-semibold tracking-tight text-ink">
-            ${product.price.toFixed(2)}
-          </p>
-
-          {/* Quantity stepper (presentational, fixed at 1) + Add to Cart */}
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <div className="glass flex items-center gap-1 rounded-pill p-1.5">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="flex items-center rounded-pill border border-line">
               <button
                 type="button"
-                disabled
+                onClick={() => setQty((q) => Math.max(1, q - 1))}
                 aria-label="Decrease quantity"
-                className="icon-pill h-10 w-10 cursor-not-allowed border-transparent bg-transparent shadow-none"
+                className="btn btn-ghost h-11 w-11"
               >
                 <Minus className="h-4 w-4" />
               </button>
               <span className="w-8 text-center text-sm font-semibold text-ink">
-                1
+                {qty}
               </span>
               <button
                 type="button"
-                disabled
+                onClick={() => setQty((q) => q + 1)}
                 aria-label="Increase quantity"
-                className="icon-pill h-10 w-10 cursor-not-allowed border-transparent bg-transparent shadow-none"
+                className="btn btn-ghost h-11 w-11"
               >
                 <Plus className="h-4 w-4" />
               </button>
             </div>
 
-            <button
-              onClick={() => addItem(product)}
-              className="btn-dark h-14 flex-1 px-7 text-sm"
-            >
+            <button onClick={buyNow} className="btn btn-primary h-11 flex-1 px-8 text-sm">
+              Buy Now
+            </button>
+            <button onClick={addToCart} className="btn btn-outline h-11 flex-1 px-8 text-sm">
               <Bag className="h-4 w-4" />
               Add to Cart
             </button>
-
-            <button
-              type="button"
-              aria-label="Save to wishlist"
-              className="btn-outline h-14 w-14 shrink-0"
-            >
-              <Heart className="h-5 w-5" />
-            </button>
           </div>
 
-          {/* Trust row (generic, presentational) */}
-          <div className="mt-8 grid grid-cols-3 gap-3 border-t border-hairline pt-6">
-            {[
-              { icon: ShieldCheck, label: "Warranty included" },
-              { icon: Truck, label: "Easy returns" },
-              { icon: Lock, label: "Secure payment" },
-            ].map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="flex flex-col items-center gap-2 text-center"
-              >
-                <span className="icon-pill h-10 w-10">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <span className="text-xs font-medium leading-tight text-muted">
-                  {label}
-                </span>
-              </div>
-            ))}
+          <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6">
+            <InfoRow
+              icon={<Truck className="h-5 w-5" />}
+              title="Free Delivery"
+              body="Enter your postal code for delivery availability."
+            />
+            <InfoRow
+              icon={<RotateCcw className="h-5 w-5" />}
+              title="Return Delivery"
+              body="Free 30-day delivery returns. Details."
+            />
           </div>
         </div>
+      </div>
+
+      {similar.length > 0 && (
+        <section className="mt-16 flex flex-col gap-6">
+          <h2 className="text-xl font-semibold tracking-tight text-ink">
+            Similar Items You Might Like
+          </h2>
+          <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+            {similar.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function InfoRow({
+  icon,
+  title,
+  body,
+}: {
+  icon: ReactNode;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+        {icon}
+      </span>
+      <div>
+        <p className="text-sm font-semibold text-ink">{title}</p>
+        <p className="text-xs text-muted">{body}</p>
       </div>
     </div>
   );
