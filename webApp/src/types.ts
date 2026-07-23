@@ -7,6 +7,13 @@ export interface Product {
   imageUrl: string;
   category: string;
   description: string;
+  averageRating?: number;
+  ratingCount?: number;
+}
+
+export interface ProductRating {
+  average: number;
+  count: number;
 }
 
 export interface CartItem extends Product {

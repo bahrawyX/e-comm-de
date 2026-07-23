@@ -57,7 +57,11 @@ function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        <Rating className="mt-2" />
+        <Rating
+          stars={product.averageRating}
+          count={product.ratingCount}
+          className="mt-2"
+        />
 
         <button
           type="button"

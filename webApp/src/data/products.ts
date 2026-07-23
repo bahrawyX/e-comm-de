@@ -24,6 +24,8 @@ const products: Product[] = [
     category: "Electronics",
     description:
       "Premium wireless headphones with noise cancellation, 30-hour battery life, and crystal-clear sound quality.",
+    averageRating: 4.5,
+    ratingCount: 24,
   },
   {
     id: 2,
@@ -33,6 +35,8 @@ const products: Product[] = [
     category: "Footwear",
     description:
       "Lightweight running shoes with responsive cushioning and breathable mesh upper for maximum comfort.",
+    averageRating: 4.2,
+    ratingCount: 18,
   },
   {
     id: 3,
@@ -42,6 +46,8 @@ const products: Product[] = [
     category: "Accessories",
     description:
       "Handcrafted genuine leather backpack with laptop compartment, multiple pockets, and adjustable straps.",
+    averageRating: 4.7,
+    ratingCount: 42,
   },
   {
     id: 4,
@@ -51,6 +57,8 @@ const products: Product[] = [
     category: "Electronics",
     description:
       "Feature-packed smartwatch with heart-rate monitor, GPS tracking, and 7-day battery life.",
+    averageRating: 3.9,
+    ratingCount: 9,
   },
   {
     id: 5,
@@ -60,6 +68,8 @@ const products: Product[] = [
     category: "Accessories",
     description:
       "Polarized UV400 sunglasses with lightweight frame. Perfect for outdoor adventures.",
+    averageRating: 4.5,
+    ratingCount: 15,
   },
   {
     id: 6,
@@ -69,6 +79,8 @@ const products: Product[] = [
     category: "Clothing",
     description:
       "Classic denim jacket with a modern slim fit. Versatile layering piece for any season.",
+    averageRating: 4.3,
+    ratingCount: 31,
   },
   {
     id: 7,
@@ -78,6 +90,8 @@ const products: Product[] = [
     category: "Fitness",
     description:
       "Eco-friendly non-slip yoga mat with extra cushioning. 6mm thick for joint protection.",
+    averageRating: 5.0,
+    ratingCount: 6,
   },
   {
     id: 8,
@@ -87,6 +101,8 @@ const products: Product[] = [
     category: "Home",
     description:
       "Programmable drip coffee maker with thermal carafe. Brews up to 12 cups of rich, flavorful coffee.",
+    averageRating: 4.2,
+    ratingCount: 27,
   },
 ];
 

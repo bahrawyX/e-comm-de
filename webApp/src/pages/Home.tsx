@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
+import FilterSelect from "../components/ui/FilterSelect";
 import { Product } from "../types";
 import { fetchProducts } from "../lib/api";
 import { Bag, Search } from "../components/icons";
@@ -8,11 +9,30 @@ const HERO_IMAGE = "./greenHeadset.png";
 
 const ALL_CATEGORIES = "All";
 
+// Price filter: value -> predicate on a product's price.
+const PRICE_OPTIONS: { value: string; label: string; match: (price: number) => boolean }[] = [
+  { value: "all", label: "All prices", match: () => true },
+  { value: "0-50", label: "Under $50", match: (p) => p < 50 },
+  { value: "50-100", label: "$50 – $100", match: (p) => p >= 50 && p < 100 },
+  { value: "100-200", label: "$100 – $200", match: (p) => p >= 100 && p < 200 },
+  { value: "200+", label: "Over $200", match: (p) => p >= 200 },
+];
+
+// Rating filter: minimum average stars.
+const RATING_OPTIONS: { value: number; label: string }[] = [
+  { value: 0, label: "All ratings" },
+  { value: 4.5, label: "4.5★ & up" },
+  { value: 4, label: "4★ & up" },
+  { value: 3, label: "3★ & up" },
+];
+
 function Home() {
   const [products, setProducts] = useState<Product[]>  ([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORIES);
+  const [priceRange, setPriceRange] = useState("all");
+  const [minRating, setMinRating] = useState(0);
 
   useEffect(() => {
     fetchProducts().then((data) => {
@@ -38,7 +58,12 @@ function Home() {
       selectedCategory === ALL_CATEGORIES ||
       product.category === selectedCategory;
 
-    return matchesSearch && matchesCategory;
+    const priceOption = PRICE_OPTIONS.find((o) => o.value === priceRange);
+    const matchesPrice = priceOption ? priceOption.match(product.price) : true;
+
+    const matchesRating = (product.averageRating ?? 0) >= minRating;
+
+    return matchesSearch && matchesCategory && matchesPrice && matchesRating;
   });
 
   const fallbackHeroImage = products[0]?.imageUrl;
@@ -97,21 +122,40 @@ function Home() {
           </div>
         </div>
 
-        <fieldset className="flex flex-wrap gap-2.5">
-          <legend className="sr-only">Filter products by category</legend>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setSelectedCategory(cat)}
-              className={`pill ${
-                selectedCategory === cat ? "pill--active" : ""
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </fieldset>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <fieldset className="flex flex-wrap gap-2.5">
+            <legend className="sr-only">Filter products by category</legend>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`pill ${
+                  selectedCategory === cat ? "pill--active" : ""
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </fieldset>
+
+          <div className="flex flex-wrap gap-2.5">
+            <FilterSelect
+              label="Filter by price"
+              value={priceRange}
+              onChange={setPriceRange}
+              options={PRICE_OPTIONS}
+              active={priceRange !== "all"}
+            />
+            <FilterSelect
+              label="Filter by rating"
+              value={minRating}
+              onChange={setMinRating}
+              options={RATING_OPTIONS}
+              active={minRating !== 0}
+            />
+          </div>
+        </div>
 
         {loading ? (
           <ProductGridSkeleton />

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="rating-1-create-table" author="claude">
+        <createTable tableName="rating">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stars" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="rating-2-seed" author="claude">
+        <sql splitStatements="true">
+            DELETE FROM rating;
+            -- Product 1: count 24, avg ~4.5
+            INSERT INTO rating (product_id, stars) SELECT 1, 5 FROM generate_series(1,15);
+            INSERT INTO rating (product_id, stars) SELECT 1, 4 FROM generate_series(1,7);
+            INSERT INTO rating (product_id, stars) SELECT 1, 3 FROM generate_series(1,2);
+            -- Product 2: count 18, avg ~4.2
+            INSERT INTO rating (product_id, stars) SELECT 2, 5 FROM generate_series(1,8);
+            INSERT INTO rating (product_id, stars) SELECT 2, 4 FROM generate_series(1,7);
+            INSERT INTO rating (product_id, stars) SELECT 2, 3 FROM generate_series(1,2);
+            INSERT INTO rating (product_id, stars) SELECT 2, 2 FROM generate_series(1,1);
+            -- Product 3: count 42, avg ~4.7
+            INSERT INTO rating (product_id, stars) SELECT 3, 5 FROM generate_series(1,30);
+            INSERT INTO rating (product_id, stars) SELECT 3, 4 FROM generate_series(1,10);
+            INSERT INTO rating (product_id, stars) SELECT 3, 3 FROM generate_series(1,2);
+            -- Product 4: count 9, avg ~3.9
+            INSERT INTO rating (product_id, stars) SELECT 4, 5 FROM generate_series(1,3);
+            INSERT INTO rating (product_id, stars) SELECT 4, 4 FROM generate_series(1,3);
+            INSERT INTO rating (product_id, stars) SELECT 4, 3 FROM generate_series(1,2);
+            INSERT INTO rating (product_id, stars) SELECT 4, 2 FROM generate_series(1,1);
+            -- Product 5: count 15, avg ~4.5
+            INSERT INTO rating (product_id, stars) SELECT 5, 5 FROM generate_series(1,9);
+            INSERT INTO rating (product_id, stars) SELECT 5, 4 FROM generate_series(1,5);
+            INSERT INTO rating (product_id, stars) SELECT 5, 3 FROM generate_series(1,1);
+            -- Product 6: count 31, avg ~4.3
+            INSERT INTO rating (product_id, stars) SELECT 6, 5 FROM generate_series(1,14);
+            INSERT INTO rating (product_id, stars) SELECT 6, 4 FROM generate_series(1,12);
+            INSERT INTO rating (product_id, stars) SELECT 6, 3 FROM generate_series(1,4);
+            INSERT INTO rating (product_id, stars) SELECT 6, 2 FROM generate_series(1,1);
+            -- Product 7: count 6, avg 5.0
+            INSERT INTO rating (product_id, stars) SELECT 7, 5 FROM generate_series(1,6);
+            -- Product 8: count 27, avg ~4.2
+            INSERT INTO rating (product_id, stars) SELECT 8, 5 FROM generate_series(1,12);
+            INSERT INTO rating (product_id, stars) SELECT 8, 4 FROM generate_series(1,10);
+            INSERT INTO rating (product_id, stars) SELECT 8, 3 FROM generate_series(1,4);
+            INSERT INTO rating (product_id, stars) SELECT 8, 2 FROM generate_series(1,1);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

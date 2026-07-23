@@ -47,7 +47,11 @@ function FavouriteCard({ product }: FavouriteCardProps) {
         <p className="mt-1 line-clamp-2 text-sm text-muted">
           {product.description}
         </p>
-        <Rating className="mt-2" />
+        <Rating
+          stars={product.averageRating}
+          count={product.ratingCount}
+          className="mt-2"
+        />
         <Price
           value={product.price}
           className="mt-2 block text-lg font-semibold text-ink"

@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useCart } from "../context/CartContext";
-import { fetchProducts } from "../lib/api";
-import { Product } from "../types";
+import { fetchProducts, submitRating, fetchProductRating } from "../lib/api";
+import { Product, ProductRating } from "../types";
 import {
   ArrowLeft,
   Plus,
@@ -28,6 +28,7 @@ function ProductDetail() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [qty, setQty] = useState<number>(1);
+  const [community, setCommunity] = useState<ProductRating>({ average: 0, count: 0 });
 
   useEffect(() => {
     fetchProducts().then((data) => {
@@ -40,6 +41,17 @@ function ProductDetail() {
     () => products.find((p) => p.id === Number(id)),
     [products, id],
   );
+
+  // Seed the displayed community rating from the product, then keep it in sync
+  // after the user submits their own rating.
+  useEffect(() => {
+    if (product) {
+      setCommunity({
+        average: product.averageRating ?? 0,
+        count: product.ratingCount ?? 0,
+      });
+    }
+  }, [product]);
 
   const similar = useMemo(
     () => products.filter((p) => p.id !== Number(id)).slice(0, 4),
@@ -111,7 +123,7 @@ function ProductDetail() {
           <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
             {product.name}
           </h1>
-          <Rating className="mt-3" />
+          <Rating stars={community.average} count={community.count} className="mt-3" />
 
           <p className="mt-5 text-3xl font-semibold text-brand">
             <Price value={product.price} />
@@ -129,11 +141,14 @@ function ProductDetail() {
             <div className="mt-2 flex items-center gap-3">
               <StarRating
                 value={ratings[product.id] ?? 0}
-                onChange={(v) => {
+                onChange={async (v) => {
                   setRating(product.id, v);
                   toast.success(
                     `You rated ${product.name} ${v} star${v > 1 ? "s" : ""}`,
                   );
+                  await submitRating(product.id, v);
+                  const fresh = await fetchProductRating(product.id);
+                  if (fresh) setCommunity(fresh);
                 }}
               />
               {(ratings[product.id] ?? 0) > 0 && (
