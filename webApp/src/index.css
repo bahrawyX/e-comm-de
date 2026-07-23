@@ -34,6 +34,23 @@ html {
   scroll-behavior: smooth;
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: #fff;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 body {
   font-family: var(--font-sans);
   color: var(--color-ink);
@@ -171,6 +188,19 @@ body {
 .icon-btn:hover {
   border-color: var(--color-brand);
   color: var(--color-brand);
+}
+
+.icon-btn--danger {
+  border-color: transparent;
+  color: var(--color-sale);
+}
+.icon-btn--danger:hover {
+  border-color: transparent;
+  color: var(--color-sale);
+}
+
+.wishlist-btn--active {
+  color: var(--color-sale);
 }
 
 .product-tile {

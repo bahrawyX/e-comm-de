@@ -10,8 +10,12 @@ const TOTAL_STARS = 5;
 
 function Rating({ stars = 5, count = 121, className = "" }: RatingProps) {
   return (
-    <div className={`flex items-center gap-1.5 ${className}`}>
-      <div className="flex text-star">
+    <div
+      className={`flex items-center gap-1.5 ${className}`}
+      role="img"
+      aria-label={`Rated ${stars} out of ${TOTAL_STARS} stars from ${count} reviews`}
+    >
+      <div className="flex text-star" aria-hidden="true">
         {Array.from({ length: TOTAL_STARS }, (_, i) => (
           <Star
             key={i}
@@ -19,7 +23,10 @@ function Rating({ stars = 5, count = 121, className = "" }: RatingProps) {
           />
         ))}
       </div>
-      <span className="text-xs text-muted">({count})</span>
+      <span className="text-xs text-muted">
+        <span className="sr-only">{count} review{count !== 1 ? "s" : ""}</span>
+        <span aria-hidden="true">({count})</span>
+      </span>
     </div>
   );
 }

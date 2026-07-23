@@ -29,8 +29,7 @@ function FavouriteCard({ product }: FavouriteCardProps) {
     <div className="flex flex-col gap-4 rounded-panel border border-line bg-white p-4 sm:flex-row sm:items-center sm:gap-6">
       <Link
         to={`/product/${product.id}`}
-        aria-label={product.name}
-        className="product-tile h-48 w-full shrink-0 sm:h-36 sm:w-36"
+        className="product-tile h-48 w-full shrink-0 sm:h-36 sm:w-36 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded"
       >
         <img src={product.imageUrl} alt={product.name} />
       </Link>
@@ -41,7 +40,7 @@ function FavouriteCard({ product }: FavouriteCardProps) {
         </span>
         <Link
           to={`/product/${product.id}`}
-          className="block truncate text-base font-semibold text-ink transition-colors hover:text-brand"
+          className="block truncate text-base font-semibold text-ink transition-colors hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded px-1 py-0.5"
         >
           {product.name}
         </Link>
@@ -57,18 +56,20 @@ function FavouriteCard({ product }: FavouriteCardProps) {
 
       <div className="flex items-center gap-2 sm:flex-col sm:items-stretch">
         <button
+          type="button"
           onClick={addToCart}
-          className="btn btn-outline h-10 flex-1 px-5 text-sm sm:flex-none"
+          className="btn btn-outline h-10 flex-1 px-5 text-sm sm:flex-none focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
-          <Bag className="h-4 w-4" />
+          <Bag className="h-4 w-4" aria-hidden="true" />
           Add to Cart
         </button>
         <button
+          type="button"
           onClick={removeFav}
-          aria-label="Remove from wishlist"
-          className="icon-btn h-10 w-10 shrink-0 self-center !border-transparent !text-sale"
+          aria-label={`Remove ${product.name} from wishlist`}
+          className="icon-btn h-10 w-10 shrink-0 self-center !border-transparent !text-sale focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
-          <Heart className="h-5 w-5" filled />
+          <Heart className="h-5 w-5" filled aria-hidden="true" />
         </button>
       </div>
     </div>

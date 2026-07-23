@@ -11,13 +11,13 @@ function Cart() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-xl rounded-panel bg-panel px-8 py-20 text-center">
-        <span className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white text-muted shadow-sm">
+        <span className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white text-muted shadow-sm" aria-hidden="true">
           <Bag className="h-7 w-7" />
         </span>
-        <h2 className="text-2xl font-semibold text-ink">Your cart is empty</h2>
+        <h1 className="text-2xl font-semibold text-ink">Your cart is empty</h1>
         <p className="mt-2 text-sm text-muted">Add a few products to get started.</p>
-        <Link to="/" className="btn btn-primary mt-8 h-11 px-6 text-sm">
-          <ArrowLeft className="h-4 w-4" />
+        <Link to="/" className="btn btn-primary mt-8 h-11 px-6 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Continue shopping
         </Link>
       </div>
@@ -31,7 +31,7 @@ function Cart() {
       </h1>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3" role="list">
           {items.map((item) => (
             <CartItem key={item.id} item={item} />
           ))}
@@ -41,24 +41,24 @@ function Cart() {
           <div className="rounded-panel border border-line bg-white p-6">
             <h2 className="text-lg font-semibold text-ink">Order Summary</h2>
 
-            <div className="mt-5 flex items-center justify-between text-sm text-muted">
-              <span>Subtotal</span>
-              <Price value={totalPrice} className="font-medium text-ink" />
-            </div>
-            <div className="mt-3 flex items-center justify-between text-sm text-muted">
-              <span>Shipping</span>
-              <span className="font-medium text-ink">Free</span>
-            </div>
+            <dl className="mt-5 flex items-center justify-between text-sm text-muted">
+              <dt>Subtotal</dt>
+              <dd><Price value={totalPrice} className="font-medium text-ink" /></dd>
+            </dl>
+            <dl className="mt-3 flex items-center justify-between text-sm text-muted">
+              <dt>Shipping</dt>
+              <dd className="font-medium text-ink">Free</dd>
+            </dl>
 
             <div className="mt-5 flex items-center justify-between border-t border-line pt-5">
               <span className="text-base font-semibold text-ink">Total</span>
               <Price value={totalPrice} className="text-xl font-semibold text-brand" />
             </div>
 
-            <Link to="/checkout" className="btn btn-primary mt-6 h-12 w-full text-sm">
+            <Link to="/checkout" className="btn btn-primary mt-6 h-12 w-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
               Proceed to Checkout
             </Link>
-            <button onClick={clearCart} className="btn btn-outline mt-3 h-11 w-full text-sm">
+            <button type="button" onClick={clearCart}  className="btn btn-outline mt-3 h-11 w-full text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
               Clear Cart
             </button>
           </div>

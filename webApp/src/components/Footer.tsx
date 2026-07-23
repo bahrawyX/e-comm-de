@@ -7,22 +7,26 @@ function Footer() {
     <footer className="mt-16 border-t border-line bg-panel">
       <div className="container-page flex flex-col items-center gap-4 py-8 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-2">
-          <CartMark className="h-6 w-6 text-brand" />
+          <CartMark className="h-6 w-6 text-brand" aria-hidden="true" />
           <span className="text-lg font-semibold tracking-tight text-ink">
             Shopcart
           </span>
         </div>
 
-        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-          {FOOTER_LINKS.map((label) => (
-            <a
-              key={label}
-              href="#"
-              className="text-sm text-muted transition-colors hover:text-brand"
-            >
-              {label}
-            </a>
-          ))}
+        <nav aria-label="Footer links">
+          <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            {FOOTER_LINKS.map((label) => (
+              <li key={label}>
+                <a
+                  href="#"
+                  className="text-sm text-muted transition-colors hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded px-1 py-0.5"
+                  title={`${label} page`}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </nav>
 
         <p className="text-xs text-muted">&copy; 2026 Shopcart. All rights reserved.</p>

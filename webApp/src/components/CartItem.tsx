@@ -26,21 +26,23 @@ function CartItem({ item }: CartItemProps) {
 
       <div className="flex items-center rounded-pill border border-line">
         <button
+          type="button"
           onClick={() => updateQty(item.id, item.qty - 1)}
-          aria-label="Decrease quantity"
-          className="btn btn-ghost h-8 w-8"
+          aria-label={`Decrease ${item.name} quantity from ${item.qty}`}
+          className="btn btn-ghost h-8 w-8 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
-          <Minus className="h-4 w-4" />
+          <Minus className="h-4 w-4" aria-hidden="true" />
         </button>
-        <span className="w-7 text-center text-sm font-semibold text-ink">
+        <span className="w-7 text-center text-sm font-semibold text-ink" aria-live="polite" aria-atomic="true">
           {item.qty}
         </span>
         <button
+          type="button"
           onClick={() => updateQty(item.id, item.qty + 1)}
-          aria-label="Increase quantity"
-          className="btn btn-ghost h-8 w-8"
+          aria-label={`Increase ${item.name} quantity from ${item.qty}`}
+          className="btn btn-ghost h-8 w-8 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
 
@@ -50,11 +52,12 @@ function CartItem({ item }: CartItemProps) {
       />
 
       <button
+        type="button"
         onClick={() => removeItem(item.id)}
         aria-label={`Remove ${item.name}`}
         className="icon-btn h-9 w-9 !border-transparent text-muted hover:!text-sale"
       >
-        <Trash className="h-4 w-4" />
+        <Trash className="h-4 w-4" aria-hidden="true" />
       </button>
     </div>
   );

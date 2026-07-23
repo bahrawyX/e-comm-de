@@ -9,7 +9,7 @@ const Login: React.FC = () => {
     <div className="flex min-h-[100dvh] items-center justify-center bg-panel px-4">
       <div className="w-full max-w-md rounded-panel border border-line bg-white p-8 text-center shadow-sm sm:p-10">
         <div className="mx-auto flex items-center justify-center gap-2">
-          <CartMark className="h-7 w-7 text-brand" />
+          <CartMark className="h-7 w-7 text-brand" aria-hidden="true" />
           <span className="text-2xl font-semibold tracking-tight text-ink">
             Shopcart
           </span>
@@ -23,15 +23,17 @@ const Login: React.FC = () => {
         </p>
 
         <button
+          type="button"
           onClick={loginWithGoogle}
-          className="btn btn-outline mt-8 h-12 w-full text-sm font-medium"
+          className="btn btn-outline mt-8 h-12 w-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          aria-label="Continue with Google sign-in"
         >
           <GoogleIcon />
           Continue with Google
         </button>
 
         <p className="mt-6 text-xs leading-relaxed text-faint">
-          By continuing you agree to our Terms &amp; Privacy Policy.
+          By continuing you agree to our <a href="#" className="hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded underline-offset-2 hover:underline">Terms &amp; Privacy Policy</a>.
         </p>
       </div>
     </div>

@@ -9,6 +9,8 @@ const base = {
   strokeWidth: 1.5,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+  focusable: false,
 };
 
 export const ArrowUpRight: React.FC<IconProps> = ({ className = "w-5 h-5" }) => (

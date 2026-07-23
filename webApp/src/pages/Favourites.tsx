@@ -21,7 +21,7 @@ function Favourites() {
   const favourites = products.filter((p) => ids.includes(p.id));
 
   if (loading) {
-    return <p className="py-20 text-center text-sm text-muted">Loading…</p>;
+    return <p className="py-20 text-center text-sm text-muted" role="status" aria-live="polite">Loading…</p>;
   }
 
   return (
@@ -32,7 +32,7 @@ function Favourites() {
 
       {favourites.length === 0 ? (
         <div className="mx-auto max-w-xl rounded-panel bg-panel px-8 py-20 text-center">
-          <span className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white text-muted shadow-sm">
+          <span className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white text-muted shadow-sm" aria-hidden="true">
             <Heart className="h-7 w-7" />
           </span>
           <h2 className="text-2xl font-semibold text-ink">
@@ -41,13 +41,13 @@ function Favourites() {
           <p className="mt-2 text-sm text-muted">
             Tap the heart on a product to save it here.
           </p>
-          <Link to="/" className="btn btn-primary mt-8 h-11 px-6 text-sm">
-            <ArrowLeft className="h-4 w-4" />
+          <Link to="/" className="btn btn-primary mt-8 h-11 px-6 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Continue shopping
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4" role="list">
           {favourites.map((product) => (
             <FavouriteCard key={product.id} product={product} />
           ))}

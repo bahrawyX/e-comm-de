@@ -54,15 +54,15 @@ function ProductDetail() {
   };
 
   if (loading) {
-    return <p className="py-20 text-center text-sm text-muted">Loading…</p>;
+    return <p className="py-20 text-center text-sm text-muted" role="status" aria-live="polite">Loading…</p>;
   }
 
   if (!product) {
     return (
       <div className="mx-auto max-w-xl rounded-panel bg-panel px-8 py-20 text-center">
-        <h2 className="text-2xl font-semibold text-ink">Product not found</h2>
-        <Link to="/" className="btn btn-primary mt-6 h-11 px-6 text-sm">
-          <ArrowLeft className="h-4 w-4" />
+        <h1 className="text-2xl font-semibold text-ink">Product not found</h1>
+        <Link to="/" className="btn btn-primary mt-6 h-11 px-6 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2">
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to shop
         </Link>
       </div>
@@ -71,23 +71,32 @@ function ProductDetail() {
 
   return (
     <div className="py-8">
-      <nav className="mb-6 flex items-center gap-2 text-xs text-muted">
-        <Link to="/" className="hover:text-brand">Home</Link>
-        <span>/</span>
-        <span className="text-faint">{product.category}</span>
-        <span>/</span>
-        <span className="truncate text-ink">{product.name}</span>
+      <nav className="mb-6 flex items-center gap-2 text-xs text-muted" aria-label="Breadcrumb">
+        <ol className="flex items-center gap-2">
+          <li><Link to="/" className="hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded px-1 py-0.5">Home</Link></li>
+          <li><span aria-hidden="true">/</span></li>
+          <li><span className="text-faint">{product.category}</span></li>
+          <li><span aria-hidden="true">/</span></li>
+          <li><span className="truncate text-ink">{product.name}</span></li>
+        </ol>
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
-          <div className="product-tile product-tile--contain aspect-[4/3]">
+          <div className="product-tile product-tile--contain aspect-4/3">
             <img src={product.imageUrl} alt={product.name} />
           </div>
           <div className="flex gap-3">
-            <button className="product-tile h-20 w-20 shrink-0 p-2 ring-2 ring-brand">
+            <button 
+              type="button"
+              className="product-tile h-20 w-20 shrink-0 p-2 ring-2 ring-brand focus:outline-none focus:ring-offset-2"
+              aria-label="View product image"
+            >
               <img src={product.imageUrl} alt="" aria-hidden="true" />
             </button>
+            <div className="product-tile h-20 w-20 shrink-0 p-2 ring-2 ring-line focus:outline-none focus:ring-brand focus:ring-offset-2" aria-hidden="true">
+              <img src={product.imageUrl} alt="" />
+            </div>
           </div>
         </div>
 
@@ -112,33 +121,41 @@ function ProductDetail() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <div className="flex items-center rounded-pill border border-line">
+            <div className="flex items-center rounded-pill border border-line" role="group" aria-label="Quantity selector">
               <button
                 type="button"
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                aria-label="Decrease quantity"
-                className="btn btn-ghost h-11 w-11"
+                aria-label={`Decrease quantity from ${qty}`}
+                className="btn btn-ghost h-11 w-11 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
               >
-                <Minus className="h-4 w-4" />
+                <Minus className="h-4 w-4" aria-hidden="true" />
               </button>
-              <span className="w-8 text-center text-sm font-semibold text-ink">
+              <span className="w-8 text-center text-sm font-semibold text-ink" role="status" aria-live="polite" aria-atomic="true" aria-label={`Selected quantity: ${qty}`}>
                 {qty}
               </span>
               <button
                 type="button"
                 onClick={() => setQty((q) => q + 1)}
-                aria-label="Increase quantity"
-                className="btn btn-ghost h-11 w-11"
+                aria-label={`Increase quantity from ${qty}`}
+                className="btn btn-ghost h-11 w-11 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
 
-            <button onClick={buyNow} className="btn btn-primary h-11 flex-1 px-8 text-sm">
+            <button 
+              type="button"
+              onClick={buyNow} 
+              className="btn btn-primary h-11 flex-1 px-8 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+            >
               Buy Now
             </button>
-            <button onClick={addToCart} className="btn btn-outline h-11 flex-1 px-8 text-sm">
-              <Bag className="h-4 w-4" />
+            <button 
+              type="button"
+              onClick={addToCart} 
+              className="btn btn-outline h-11 flex-1 px-8 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+            >
+              <Bag className="h-4 w-4" aria-hidden="true" />
               Add to Cart
             </button>
           </div>
@@ -159,7 +176,7 @@ function ProductDetail() {
       </div>
 
       {similar.length > 0 && (
-        <section className="mt-16 flex flex-col gap-6">
+        <section className="mt-16 flex flex-col gap-6" aria-label="Similar products">
           <h2 className="text-xl font-semibold tracking-tight text-ink">
             Similar Items You Might Like
           </h2>
@@ -185,7 +202,7 @@ function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand" aria-hidden="true">
         {icon}
       </span>
       <div>

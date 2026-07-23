@@ -28,17 +28,17 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <li className="product-card group list-none">
       <div className="product-tile aspect-square">
-        <Link to={`/product/${product.id}`} aria-label={product.name}>
+        <Link to={`/product/${product.id}`} className="focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded">
           <img src={product.imageUrl} alt={product.name} />
         </Link>
         <button
           type="button"
-          aria-label="Save to wishlist"
+          aria-label={faved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
           aria-pressed={faved}
           onClick={toggleFav}
-          className={`wishlist-btn ${faved ? "!text-sale" : ""}`}
+          className={`wishlist-btn focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded ${faved ? "wishlist-btn--active" : ""}`}
         >
-          <Heart className="h-4 w-4" filled={faved} />
+          <Heart className="h-4 w-4" filled={faved} aria-hidden="true" />
         </button>
       </div>
 
@@ -46,7 +46,7 @@ function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-start justify-between gap-2">
           <Link
             to={`/product/${product.id}`}
-            className="text-sm font-semibold text-ink transition-colors group-hover:text-brand"
+            className="text-sm font-semibold text-ink transition-colors group-hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 rounded px-1 py-0.5"
           >
             {product.name}
           </Link>
@@ -60,13 +60,14 @@ function ProductCard({ product }: ProductCardProps) {
         <Rating className="mt-2" />
 
         <button
+          type="button"
           onClick={() => {
             addItem(product);
             toast.success(`${product.name} added to cart`);
           }}
-          className="btn btn-outline mt-3 h-9 px-5 text-sm"
+          className="btn btn-outline mt-3 h-9 px-5 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
-          <Bag className="h-4 w-4" />
+          <Bag className="h-4 w-4" aria-hidden="true" />
           Add to Cart
         </button>
       </div>
