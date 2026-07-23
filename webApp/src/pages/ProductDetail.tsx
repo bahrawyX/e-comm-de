@@ -14,12 +14,16 @@ import {
 } from "../components/icons";
 import Price from "../components/ui/Price";
 import Rating from "../components/ui/Rating";
+import StarRating from "../components/ui/StarRating";
 import ProductCard from "../components/ProductCard";
+import { useRatings } from "../context/RatingsContext";
 
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const ratings = useRatings((s) => s.ratings);
+  const setRating = useRatings((s) => s.setRating);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -119,6 +123,26 @@ function ProductDetail() {
           <p className="mt-5 max-w-prose text-sm leading-relaxed text-muted">
             {product.description}
           </p>
+
+          <div className="mt-6">
+            <p className="text-sm font-medium text-ink">Rate this product</p>
+            <div className="mt-2 flex items-center gap-3">
+              <StarRating
+                value={ratings[product.id] ?? 0}
+                onChange={(v) => {
+                  setRating(product.id, v);
+                  toast.success(
+                    `You rated ${product.name} ${v} star${v > 1 ? "s" : ""}`,
+                  );
+                }}
+              />
+              {(ratings[product.id] ?? 0) > 0 && (
+                <span className="text-xs text-muted">
+                  Your rating: {ratings[product.id]}/5
+                </span>
+              )}
+            </div>
+          </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <div className="flex items-center rounded-pill border border-line" role="group" aria-label="Quantity selector">

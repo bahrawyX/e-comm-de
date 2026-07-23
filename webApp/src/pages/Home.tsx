@@ -153,9 +153,7 @@ function EmptyCatalog({ message }: EmptyCatalogProps) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-panel bg-panel px-8 py-16 text-center" role="status">
       <Bag className="h-8 w-8 text-muted" aria-hidden="true" />
-      <p className="text-sm text-muted">
-        No products available right now. Please check back soon.
-      </p>
+      <p className="text-sm text-muted">{message}</p>
     </div>
   );
 }
