@@ -16,14 +16,12 @@ import Price from "../components/ui/Price";
 import Rating from "../components/ui/Rating";
 import StarRating from "../components/ui/StarRating";
 import ProductCard from "../components/ProductCard";
-import { useRatings } from "../context/RatingsContext";
 
 function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { addItem } = useCart();
-  const ratings = useRatings((s) => s.ratings);
-  const setRating = useRatings((s) => s.setRating);
+  const [myRating, setMyRating] = useState(0);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -50,6 +48,7 @@ function ProductDetail() {
         average: product.averageRating ?? 0,
         count: product.ratingCount ?? 0,
       });
+      setMyRating(0);
     }
   }, [product]);
 
@@ -140,9 +139,9 @@ function ProductDetail() {
             <p className="text-sm font-medium text-ink">Rate this product</p>
             <div className="mt-2 flex items-center gap-3">
               <StarRating
-                value={ratings[product.id] ?? 0}
+                value={myRating}
                 onChange={async (v) => {
-                  setRating(product.id, v);
+                  setMyRating(v);
                   toast.success(
                     `You rated ${product.name} ${v} star${v > 1 ? "s" : ""}`,
                   );
@@ -151,9 +150,9 @@ function ProductDetail() {
                   if (fresh) setCommunity(fresh);
                 }}
               />
-              {(ratings[product.id] ?? 0) > 0 && (
+              {myRating > 0 && (
                 <span className="text-xs text-muted">
-                  Your rating: {ratings[product.id]}/5
+                  Your rating: {myRating}/5
                 </span>
               )}
             </div>
