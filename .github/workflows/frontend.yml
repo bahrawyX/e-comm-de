@@ -1,0 +1,50 @@
+name: Frontend
+
+on:
+  push:
+    branches: [main]
+    paths: ['webApp/**', .github/workflows/frontend.yml']
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download Terraform Outputs
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: infrastructure.yml
+          name: terraform-outputs
+          path: .
+      
+      - name: Load Terraform Outputs
+        run: cat tf-outputs.env >> $GITHUB_ENV
+      
+      - uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Build and Deploy
+        working-directory: ./webApp
+        env:
+          VITE_BACKEND_URL: https://${{ env.API_GATEWAY_HOSTNAME }}
+          
+        run: |
+          curl -sL https://firebase.tools | bash
+          echo "${{ secrets.FIREBASE_CREDENTIALS }}" > .env
+          npm i
+          npm run build
+          firebase deploy
